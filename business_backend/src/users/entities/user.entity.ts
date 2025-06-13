@@ -3,14 +3,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
+  //OneToMany,
   BeforeInsert,
 } from 'typeorm';
 import { Sale } from '../../sales/entities/sale.entity';
 import * as bcrypt from 'bcrypt';
 import { IsEmail, IsNotEmpty, MinLength, IsIn } from 'class-validator';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -29,7 +29,7 @@ export class User {
   @IsIn(['user', 'admin'])
   role: string;
 
-  @OneToMany(() => Sale, (sale) => sale.user)
+  // @OneToMany(() => Sale, (sale) => sale.user)
   sales: Sale[];
 
   @BeforeInsert()
