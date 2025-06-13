@@ -1,4 +1,3 @@
-// src/auth/auth.controller.ts
 import {
   Controller,
   Post,
@@ -11,7 +10,6 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { LoginUserDto } from '../users/dto/login-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guards/roles.guard';
@@ -30,7 +28,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req, @Body() dto: LoginUserDto) {
+  async login(@Request() req) {
     return this.authService.login(req.user);
   }
 
