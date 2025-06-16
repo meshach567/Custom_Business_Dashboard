@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   ManyToOne,
+  JoinTable,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsNotEmpty, IsString, IsNumber, Min } from 'class-validator';
@@ -36,5 +37,6 @@ export class Sale {
     nullable: false,
     onDelete: 'CASCADE',
   })
+  @JoinTable()
   user: User;
 }
