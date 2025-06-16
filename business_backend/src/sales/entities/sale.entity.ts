@@ -11,7 +11,7 @@ export class Sale {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('text')
   productName: string;
 
   @Column('int')
