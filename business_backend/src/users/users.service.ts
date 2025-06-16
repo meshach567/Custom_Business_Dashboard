@@ -1,5 +1,5 @@
 // src/users/users.service.ts
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,12 +15,40 @@ export class UsersService {
     private usersRepo: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+  // async create(createUserDto: CreateUserDto): Promise<User> {
+  //   const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+  //   const user = this.usersRepo.create({
+  //     ...createUserDto,
+  //     password: hashedPassword,
+  //   });
+  //   return this.usersRepo.save(user);
+  // }
+
+  async create(createUserDto: CreateUserDto) {
+    const saltRounds = 10;
+
+    const existingUser = await this.usersRepo.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    if (!createUserDto.password) {
+      throw new Error('Password is required');
+    }
+
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      saltRounds,
+    );
+
     const user = this.usersRepo.create({
       ...createUserDto,
       password: hashedPassword,
     });
+
     return this.usersRepo.save(user);
   }
 
